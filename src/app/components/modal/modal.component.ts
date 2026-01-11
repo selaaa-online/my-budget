@@ -1,9 +1,8 @@
 import { Component, input, output, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-modal',
-  imports: [CommonModule],
+  imports: [],
   template: `
     @if (isOpen()) {
       <div

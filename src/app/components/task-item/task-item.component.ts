@@ -1,11 +1,11 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Task, TaskStatus, TaskPriority } from '../../models/task.model';
 import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-task-item',
-  imports: [CommonModule, ButtonComponent],
+  imports: [DatePipe, ButtonComponent],
   template: `
     <div class="task-item" [class.completed]="task().status === 'COMPLETED'">
       <div class="task-content">
@@ -181,7 +181,10 @@ export class TaskItemComponent {
   delete = output<Task>();
 
   protected formatStatus(status: TaskStatus): string {
-    return status.replace('_', ' ');
+    if (status === TaskStatus.TODO) return 'To Do';
+    if (status === TaskStatus.IN_PROGRESS) return 'In Progress';
+    if (status === TaskStatus.COMPLETED) return 'Completed';
+    return status;
   }
 
   protected isOverdue(): boolean {

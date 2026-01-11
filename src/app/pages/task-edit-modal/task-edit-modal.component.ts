@@ -1,5 +1,4 @@
 import { Component, input, output, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Task, TaskStatus, TaskPriority } from '../../models/task.model';
 import { ModalComponent } from '../../components/modal/modal.component';
@@ -7,7 +6,7 @@ import { ButtonComponent } from '../../components/button/button.component';
 
 @Component({
   selector: 'app-task-edit-modal',
-  imports: [CommonModule, ReactiveFormsModule, ModalComponent, ButtonComponent],
+  imports: [ReactiveFormsModule, ModalComponent, ButtonComponent],
   templateUrl: './task-edit-modal.component.html',
   styleUrl: './task-edit-modal.component.css',
 })
@@ -121,7 +120,7 @@ export class TaskEditModalComponent {
     }
     if (control.errors['maxlength']) {
       const maxLength = control.errors['maxlength'].requiredLength;
-      return `${this.getFieldLabel(fieldName)} must not exceed ${maxLength} characters`;
+      return `${this.getFieldLabel(fieldName)} cannot exceed ${maxLength} characters`;
     }
 
     return '';
