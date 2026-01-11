@@ -1,0 +1,109 @@
+<app-modal [isOpen]="isOpen()" (closed)="onCancel()">
+  <div slot="title">{{ task() ? 'Edit Task' : 'Create New Task' }}</div>
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form">
+    <div class="form-group">
+      <label for="task-title" class="form-label">
+        Title <span class="required">*</span>
+      </label>
+      <input
+        id="task-title"
+        type="text"
+        class="form-input"
+        [class.error]="hasError('title')"
+        formControlName="title"
+        placeholder="Enter task title"
+        [attr.aria-invalid]="hasError('title')"
+        [attr.aria-describedby]="hasError('title') ? 'title-error' : null"
+      />
+      @if (hasError('title')) {
+        <p id="title-error" class="error-message" role="alert">
+          {{ getErrorMessage('title') }}
+        </p>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="task-description" class="form-label">
+        Description <span class="required">*</span>
+      </label>
+      <textarea
+        id="task-description"
+        class="form-textarea"
+        [class.error]="hasError('description')"
+        formControlName="description"
+        placeholder="Enter task description"
+        rows="4"
+        [attr.aria-invalid]="hasError('description')"
+        [attr.aria-describedby]="hasError('description') ? 'description-error' : null"
+      ></textarea>
+      @if (hasError('description')) {
+        <p id="description-error" class="error-message" role="alert">
+          {{ getErrorMessage('description') }}
+        </p>
+      }
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="task-status" class="form-label">
+          Status <span class="required">*</span>
+        </label>
+        <select
+          id="task-status"
+          class="form-select"
+          formControlName="status"
+          [attr.aria-invalid]="hasError('status')"
+        >
+          @for (option of statusOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="task-priority" class="form-label">
+          Priority <span class="required">*</span>
+        </label>
+        <select
+          id="task-priority"
+          class="form-select"
+          formControlName="priority"
+          [attr.aria-invalid]="hasError('priority')"
+        >
+          @for (option of priorityOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="task-due-date" class="form-label">Due Date</label>
+      <input
+        id="task-due-date"
+        type="date"
+        class="form-input"
+        formControlName="dueDate"
+      />
+    </div>
+
+    <div class="form-actions">
+      <app-button
+        type="button"
+        variant="secondary"
+        (clicked)="onCancel()"
+        ariaLabel="Cancel"
+      >
+        Cancel
+      </app-button>
+      <app-button
+        type="submit"
+        variant="primary"
+        ariaLabel="Save task"
+      >
+        Save Task
+      </app-button>
+    </div>
+  </form>
+</app-modal>

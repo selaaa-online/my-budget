@@ -1,0 +1,169 @@
+<div class="task-list-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Task Manager</h1>
+      <app-button (clicked)="onAddTask()" ariaLabel="Add new task">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          width="20"
+          height="20"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+        Add Task
+      </app-button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">{{ taskStats().total }}</div>
+        <div class="stat-label">Total Tasks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ taskStats().todo }}</div>
+        <div class="stat-label">To Do</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ taskStats().inProgress }}</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ taskStats().completed }}</div>
+        <div class="stat-label">Completed</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls-section">
+    <div class="search-wrapper">
+      <app-search-input
+        [value]="searchQuery()"
+        placeholder="Search tasks..."
+        (valueChange)="onSearchChange($event)"
+      />
+    </div>
+
+    <div class="filters-wrapper">
+      <div class="filter-group">
+        <label for="status-filter" class="filter-label">Filter:</label>
+        <div class="filter-buttons" role="group" aria-label="Task status filter">
+          @for (filter of filters; track filter.value) {
+            <button
+              type="button"
+              class="filter-button"
+              [class.active]="currentFilter() === filter.value"
+              (click)="onFilterChange(filter.value)"
+              [attr.aria-pressed]="currentFilter() === filter.value"
+            >
+              {{ filter.label }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="sort-group">
+        <label for="sort-select" class="filter-label">Sort by:</label>
+        <div class="sort-controls">
+          <select
+            id="sort-select"
+            class="sort-select"
+            [value]="currentSort().sortBy"
+            (change)="onSortChange($event)"
+          >
+            @for (option of sortOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          <button
+            type="button"
+            class="sort-direction-button"
+            (click)="toggleSortDirection()"
+            [attr.aria-label]="'Sort ' + currentSort().direction + 'ending'"
+          >
+            @if (currentSort().direction === 'asc') {
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 15l7-7 7 7"
+                />
+              </svg>
+            } @else {
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tasks-section">
+    @if (tasks().length > 0) {
+      <div class="tasks-list">
+        @for (task of tasks(); track task.id) {
+          <app-task-item
+            [task]="task"
+            (edit)="onEditTask($event)"
+            (delete)="onDeleteTask($event)"
+          />
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="empty-icon"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+          />
+        </svg>
+        <h3 class="empty-title">No tasks found</h3>
+        <p class="empty-description">
+          {{ searchQuery() || currentFilter() !== 'ALL'
+            ? 'Try adjusting your search or filters'
+            : 'Get started by creating your first task' }}
+        </p>
+      </div>
+    }
+  </div>
+</div>
+
+<app-task-edit-modal
+  [isOpen]="isEditing()"
+  [task]="editingTask()"
+  (closed)="onCloseModal()"
+  (saved)="onSaveTask($event)"
+/>
