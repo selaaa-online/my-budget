@@ -120,7 +120,7 @@ export class TaskEditModalComponent {
     }
     if (control.errors['maxlength']) {
       const maxLength = control.errors['maxlength'].requiredLength;
-      return `${this.getFieldLabel(fieldName)} must not exceed ${maxLength} characters`;
+      return `${this.getFieldLabel(fieldName)} cannot exceed ${maxLength} characters`;
     }
 
     return '';

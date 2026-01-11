@@ -181,7 +181,10 @@ export class TaskItemComponent {
   delete = output<Task>();
 
   protected formatStatus(status: TaskStatus): string {
-    return status.replace('_', ' ');
+    if (status === TaskStatus.TODO) return 'To Do';
+    if (status === TaskStatus.IN_PROGRESS) return 'In Progress';
+    if (status === TaskStatus.COMPLETED) return 'Completed';
+    return status;
   }
 
   protected isOverdue(): boolean {
