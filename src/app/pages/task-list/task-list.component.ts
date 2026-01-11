@@ -1,5 +1,4 @@
 import { Component, signal, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { TaskService } from '../../services/task.service';
 import { Task, TaskFilter, TaskStatus, TaskSortBy, SortDirection } from '../../models/task.model';
 import { SearchInputComponent } from '../../components/search-input/search-input.component';
@@ -11,7 +10,6 @@ import { ConfirmationModalComponent } from '../../components/confirmation-modal/
 @Component({
   selector: 'app-task-list',
   imports: [
-    CommonModule,
     SearchInputComponent,
     TaskItemComponent,
     ButtonComponent,

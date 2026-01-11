@@ -44,7 +44,7 @@ export class TaskService {
           comparison = aDate - bDate;
           break;
         case 'priority':
-          const priorityOrder = { HIGH: 3, MEDIUM: 2, LOW: 1 };
+          const priorityOrder: Record<TaskPriority, number> = { HIGH: 3, MEDIUM: 2, LOW: 1 };
           comparison = priorityOrder[a.priority] - priorityOrder[b.priority];
           break;
         case 'status':
@@ -119,18 +119,6 @@ export class TaskService {
   setSort(sortBy: TaskSortBy, direction: SortDirection): void {
     this.sortBy.set(sortBy);
     this.sortDirection.set(direction);
-  }
-
-  getCurrentSearchQuery(): string {
-    return this.searchQuery();
-  }
-
-  getCurrentFilter(): TaskFilter {
-    return this.filterBy();
-  }
-
-  getCurrentSort(): { sortBy: TaskSortBy; direction: SortDirection } {
-    return { sortBy: this.sortBy(), direction: this.sortDirection() };
   }
 
   private generateId(): string {
