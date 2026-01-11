@@ -6,6 +6,7 @@ import { SearchInputComponent } from '../../components/search-input/search-input
 import { TaskItemComponent } from '../../components/task-item/task-item.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import { TaskEditModalComponent } from '../task-edit-modal/task-edit-modal.component';
+import { ConfirmationModalComponent } from '../../components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-task-list',
@@ -15,6 +16,7 @@ import { TaskEditModalComponent } from '../task-edit-modal/task-edit-modal.compo
     TaskItemComponent,
     ButtonComponent,
     TaskEditModalComponent,
+    ConfirmationModalComponent,
   ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css',
@@ -49,6 +51,15 @@ export class TaskListComponent {
 
   protected readonly isEditing = signal(false);
   protected readonly editingTask = signal<Task | null>(null);
+  protected readonly isConfirmingDelete = signal(false);
+  protected readonly taskToDelete = signal<Task | null>(null);
+
+  protected get deleteConfirmationMessage(): string {
+    const task = this.taskToDelete();
+    return task 
+      ? `Are you sure you want to delete "${task.title}"? This action cannot be undone.`
+      : '';
+  }
 
   protected onSearchChange(query: string): void {
     this.searchQuery.set(query);
@@ -86,9 +97,21 @@ export class TaskListComponent {
   }
 
   protected onDeleteTask(task: Task): void {
-    if (confirm(`Are you sure you want to delete "${task.title}"?`)) {
+    this.taskToDelete.set(task);
+    this.isConfirmingDelete.set(true);
+  }
+
+  protected onConfirmDelete(): void {
+    const task = this.taskToDelete();
+    if (task) {
       this.taskService.deleteTask(task.id);
     }
+    this.onCancelDelete();
+  }
+
+  protected onCancelDelete(): void {
+    this.isConfirmingDelete.set(false);
+    this.taskToDelete.set(null);
   }
 
   protected onCloseModal(): void {

@@ -167,3 +167,12 @@
   (closed)="onCloseModal()"
   (saved)="onSaveTask($event)"
 />
+
+<app-confirmation-modal
+  [isOpen]="isConfirmingDelete()"
+  [title]="'Delete Task'"
+  [message]="deleteConfirmationMessage"
+  [confirmText]="'Yes, Delete'"
+  (confirmed)="onConfirmDelete()"
+  (cancelled)="onCancelDelete()"
+/>
